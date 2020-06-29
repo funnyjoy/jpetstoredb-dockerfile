@@ -1,0 +1,16 @@
+FROM mariadb:10.4.11
+
+ENV MYSQL_ROOT_PASSWORD qwer1234
+ENV MYSQL_DATABASE jpetstoredb
+ENV MYSQL_USER jpetstore
+ENV MYSQL_PASSWORD qwer1234
+
+ADD jpetstore.sql /docker-entrypoint-initdb.d
+
+RUN cp -r /var/lib/mysql /var/lib/mysql-outofvolume
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 3306
+
+CMD ["mysqld", "--datadir", "/var/lib/mysql-outofvolume", "--character-set-server", "utf8mb4", "--collation-server", "utf8mb4_unicode_ci", "--skip-character-set-client-handshake"]
